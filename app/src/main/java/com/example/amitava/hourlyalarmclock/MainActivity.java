@@ -17,6 +17,9 @@ public class MainActivity extends AppCompatActivity {
     AlarmManager alarmManager;
     Calendar calendar;
 
+    int alarmHour;
+    int alarmMinute;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +39,25 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        alarmHour = timePicker.getHour();
+        alarmMinute = timePicker.getMinute();
+        String hour = null;
+        String minute = null;
+        String day = "am";
+
+        if(alarmHour > 12){
+            alarmHour = alarmHour - 12;
+            hour = String.valueOf(alarmHour);
+            day = "pm";
+        }
+        if(alarmHour < 10){
+            minute = "0" + String.valueOf(alarmMinute);
+        }
+
+
         if(item.getItemId() == R.id.set_alarm){
-            Toast.makeText(MainActivity.this, "Alarm is set !", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "Alarm is set to " + hour+":"+minute+" "+day, Toast.LENGTH_LONG).show();
         }
         return super.onOptionsItemSelected(item);
     }

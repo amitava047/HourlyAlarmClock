@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">HRLY Alarm Clock</string>
+    <string name="set_alarm">Set Alarm</string>
+    <string name="alarm_message">Pick the time to set the Alarm</string>
+</resources>

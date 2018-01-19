@@ -4,5 +4,9 @@
     <item android:id="@+id/set_alarm"
         android:title="@string/set_alarm"
         app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/cancel_alarm"
+        android:title="@string/cancel_alarm"
+        app:showAsAction="never" />
 
 </menu>

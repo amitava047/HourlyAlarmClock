@@ -5,4 +5,8 @@
     <string name="alarm_message">Pick the time to set the Alarm</string>
     <string name="alarm_cancel_message">Alarm cancelled !</string>
     <string name="alarm_default_message">Please try again.</string>
+
+    <!--Hourly Alarm Clock option string-->
+    <string name="hourly_alarm_option">Hourly Alarm Turn On/Off</string>
 </resources>
+

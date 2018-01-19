@@ -5,9 +5,12 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -16,10 +19,11 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity {
 
     TimePicker timePicker;
-    AlarmManager alarmManager;
+    AlarmManager alarmManager, alarmManagerHourly;
     Calendar calendar;
-    Intent intent;
-    PendingIntent pendingIntent;
+    Intent intent, intentHourly;
+    PendingIntent pendingIntent, pendingIntentHourly;
+    CheckBox checkBox;
 
     int alarmHour;
     int alarmMinute;
@@ -33,8 +37,15 @@ public class MainActivity extends AppCompatActivity {
         timePicker = findViewById(R.id.timePicker);
         calendar = Calendar.getInstance();
 
+        alarmManagerHourly = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        checkBox = (CheckBox) findViewById(R.id.hourly_alarm_check);
+
         //Creating an Intent for the Alarm Receiver class
         intent = new Intent(MainActivity.this, AlarmReceiver.class);
+
+        //Creating an Intent for the Hourly Alarm
+        intentHourly = new Intent(MainActivity.this, AlarmReceiver.class);
     }
 
     @Override
@@ -94,6 +105,21 @@ public class MainActivity extends AppCompatActivity {
             default:
                 Toast.makeText(MainActivity.this, getString(R.string.alarm_default_message), Toast.LENGTH_SHORT).show();
                 return super.onOptionsItemSelected(item);
+        }
+    }
+    public void onCheckboxClicked(View view) {
+        //get the current status of the checkbox
+        boolean isChecked = ((CheckBox) view).isChecked();
+
+        if (isChecked) {
+            Log.d("PendingIntent", "Created for hourly alarm");
+            intentHourly.putExtra("hourly", "time");
+            pendingIntentHourly = PendingIntent.getBroadcast(MainActivity.this,
+                    1, intentHourly, PendingIntent.FLAG_UPDATE_CURRENT);
+            alarmManagerHourly.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                    AlarmManager.INTERVAL_HOUR, pendingIntentHourly);
+        } else {
+            alarmManagerHourly.cancel(pendingIntentHourly);
         }
     }
 }

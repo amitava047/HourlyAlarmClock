@@ -1,5 +1,9 @@
 package com.example.amitava.hourlyalarmclock;
 
+import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -14,7 +18,7 @@ import android.util.Log;
 public class RingtonePlayingService extends Service {
     MediaPlayer mediaPlayer;
     //int state;
-    boolean isRunning = false;
+    static boolean isRunning = false;
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -24,6 +28,9 @@ public class RingtonePlayingService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         String alarm_state = intent.getExtras().getString("extra");
+
+
+
 
         //converting the alarm state which is extra string in the Intent, to flags
         //assert alarm_state != null;
@@ -46,6 +53,26 @@ public class RingtonePlayingService extends Service {
             mediaPlayer = MediaPlayer.create(this, R.raw.wake_up_sound);
             mediaPlayer.start();
             this.isRunning = true;
+            //Initializing the Notification Manager with the System Notification service... hope it works :3
+            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+            //Intent for opening the mainActivity when the notification is clicked
+            Intent intentToMain = new Intent(this.getApplicationContext(), MainActivity.class);
+            //Notification requires a pending intent
+            PendingIntent pendingIntentToMain = PendingIntent.getActivity(this.getApplicationContext(), 0,
+                    intentToMain,PendingIntent.FLAG_CANCEL_CURRENT);
+
+            //creating the actual notification which will be shown to the user
+            Notification notification = new Notification.Builder(this)
+                    .setContentTitle("Alarm")
+                    .setContentText("Click here to cancel/stop the alarm")
+                    .setAutoCancel(true)
+                    .setContentIntent(pendingIntentToMain)
+                    .setSmallIcon(R.drawable.icon)
+                    .build();
+
+            //notification start command to use the notification manager to call the notification
+            notificationManager.notify(0, notification);
         }else if (this.isRunning && flags==0){
             //When music is playing and the user click on alarm off
             Log.d("There is music running","But you want to turn off alarm");

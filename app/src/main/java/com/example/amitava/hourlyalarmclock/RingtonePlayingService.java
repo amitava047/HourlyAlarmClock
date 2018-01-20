@@ -13,12 +13,16 @@ import android.util.Log;
 
 /**
  * Created by Amitava on 18-Jan-18.
+ * This class will basically start the Ringtone Service for handling the media file
+ * and playing the ringtone when the alarm is triggered by the Broadcast Receiver
  */
 
 public class RingtonePlayingService extends Service {
+    //MediaPlayer objects for handling two different media file
     MediaPlayer mediaPlayer = new MediaPlayer();
     MediaPlayer mediaPlayerHourly = new MediaPlayer();
-    //int state;
+    //A boolean variable which will give the current status of the ringtone service
+    //if it's running or not
     static boolean isRunning = false;
     @Nullable
     @Override
@@ -28,14 +32,18 @@ public class RingtonePlayingService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        //Recognizing if the service call occured for the Hourly alarm or the normal alarm
         if (intent.hasExtra("hourly")){
             Log.d("Hourly Alarm", "On the receiver");
+            //If the Normal alarm is playing at this time, we need to stop the service first
             mediaPlayer.reset();
             String hourly_alarm_time = intent.getExtras().getString("hourly");
+            //Initializing the mediaPlayer Object with the media file and starting it
             mediaPlayerHourly = MediaPlayer.create(this, R.raw.chimes);
             mediaPlayerHourly.start();
 
         } else {
+            //If the Hourly alarm is playing at this time, we need to stop the service first
             mediaPlayerHourly.reset();
             String alarm_state = intent.getExtras().getString("extra");
             //converting the alarm state which is extra string in the Intent, to flags
@@ -100,7 +108,5 @@ public class RingtonePlayingService extends Service {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
+    public void onDestroy() {super.onDestroy();}
 }

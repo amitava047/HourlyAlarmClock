@@ -1,8 +1,11 @@
 <resources>
+    <!--Application Title-->
     <string name="app_name">HRLY Alarm Clock</string>
+    <!--Menu option labels-->
     <string name="set_alarm">Set Alarm</string>
     <string name="cancel_alarm">Cancel Alarm</string>
     <string name="alarm_message">Pick the time to set the Alarm</string>
+    <!--Messages shown to the user as they interact with the application-->
     <string name="alarm_cancel_message">Alarm cancelled !</string>
     <string name="alarm_default_message">Please try again.</string>
 
